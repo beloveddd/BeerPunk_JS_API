@@ -1,0 +1,59 @@
+* {
+    font-family: 'Fredoka', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+body {
+    background: url("images/background.png") no-repeat fixed center;
+    background-size: unset;
+    background-position: 25% -61%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 30px;
+    background-color: rgba(88, 88, 233, 0.5);
+    border-radius: 25px;
+    color: white;
+}
+
+.header h1 {
+    margin: 0 0 0 28%;
+    text-transform: uppercase;
+    font-size: 3rem;
+}
+
+#favourites {
+    background-color: rgb(245, 245, 245, 1);
+    padding: 10px;
+    border-radius: 25px;
+    color: rgb(58, 58, 58);
+    cursor: pointer;
+    font-weight: bolder;
+}
+
+#favourites:hover {
+    background-color: rgb(245, 245, 245, 0.5);
+}
+
+#searchContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+#searchContainer input {
+    padding: 7px;
+    margin: 0 5px;
+    height: 25px;
+    width: 235px;
+    border-radius: 20px;
+}
+
+i.search {
+    cursor: pointer;
+    font-size: 25px;
+}
