@@ -19,7 +19,7 @@ export function checkSearchInputValue(e) {
 }
 
 export function searchBeers(searchValue) {
-    const urlGetBeerName = `${URL_GET_BEERS}${URL_PARAMATERS.BEER_NAME}${searchValue}`;
+    const urlGetBeerName = `${URL_GET_BEERS}?${URL_PARAMATERS.BEER_NAME}=${searchValue}`;
 
     fetch(urlGetBeerName)
     .then((response) => {
@@ -33,7 +33,7 @@ export function searchBeers(searchValue) {
         BEERS_CONTAINER.firstElementChild.scrollIntoView(false);
 
         if (data.length) {
-            sentBeerTitleToRecentSearches(searchValue);
+            addToRecentSearches(searchValue);
         }
     })
     .catch( (e) => {
@@ -50,14 +50,12 @@ export function markAsInvalid(input) {
 }
 
 export function parseBeerData(beerItem) {
-    const price = getBeerPrice();
-        
     return {
         id: beerItem.id,
         name: beerItem.name,
         imageUrl: beerItem.image_url,
         description: beerItem.description,
-        price: price,
+        price: getBeerPrice(),
     } 
 }
 
@@ -67,6 +65,7 @@ export function getBeerPrice() {
 
         return rand.toFixed(2) + CURRENCY;
     }
+
     return randomInteger(5, 10);
 }
 
@@ -97,7 +96,7 @@ export function clearItemsFromBeerContainer() {
     Array.from(BEERS_CONTAINER.children).forEach( (elem) => elem.remove());
 }
 
-export function sentBeerTitleToRecentSearches(searchValue) {
+export function addToRecentSearches(searchValue) {
     const recentItem = Array.from(RECENT_SEARCHES_CONTAINER.children).find( (elem) => elem.outerText === searchValue);
 
     if (recentItem) {
@@ -105,7 +104,7 @@ export function sentBeerTitleToRecentSearches(searchValue) {
     }
 
     const searchItem = document.createElement('div');
-    
+
     searchItem.classList.add(`${CLASSES.RECENT_SEARCH}`);
     searchItem.innerHTML = searchValue;
     RECENT_SEARCHES_CONTAINER.append(searchItem);
