@@ -1,1 +1,3 @@
-#APP BEER API
+#APP BEER PUNK
+
+App BEER PUNK for my traineeship task
