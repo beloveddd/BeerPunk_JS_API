@@ -14,7 +14,7 @@ body {
     justify-content: space-around;
     align-items: center;
     margin-top: 30px;
-    background-color: rgba(88, 88, 233, 0.5);
+    background-color: rgba(88, 88, 233, 0.7);
     border-radius: 25px;
     color: white;
 }
@@ -56,4 +56,73 @@ body {
 i.search {
     cursor: pointer;
     font-size: 25px;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.beersContainer {
+    display: flex;
+}
+
+.divBeer,
+.divError {
+    background-color: rgba(88, 88, 233, 0.7);
+    width: 20rem;
+    margin: 10px auto;
+    border: 2px solid rgb(58, 58, 58);
+    border-radius: 15px;
+    padding: 10px;
+    font-weight: 600;
+}
+
+.beerTitle {
+    margin: 0 0 5px 0;
+    color: whitesmoke;
+}
+
+.divDescr {
+    display: flex;
+}
+
+.divPr {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+.beerPrice {
+    margin: 5px 0;
+    font-weight: bold;
+    border-top: 1px solid whitesmoke;
+    border-bottom: 1px solid whitesmoke;
+}
+
+.beerDescription {
+    border-top: 1px solid whitesmoke;
+    font-size: 15px;
+}
+
+.beerImg {
+    width: 100px;
+}
+
+.divError {
+    background-color: rgb(232, 255, 102);
+    text-align: center;
+}
+
+#recentSearches {
+    width: 20rem;
+    margin: 10px auto;
+    font-weight: 600;
+}
+
+.recentSearch {
+    display: inline-block;
+    border: 2px solid rgb(58, 58, 58);
+    border-radius: 10px;
+    padding: 3px;
+    margin: 5px;
 }
