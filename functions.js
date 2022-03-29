@@ -1,5 +1,5 @@
 import { BeerItem } from "./BeerItem.js";
-import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, ERROR, RECENT_SEARCHES_CONTAINER, CURRENCY } from "./consts.js";
+import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, ERROR, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, LOAD_MORE, DISPLAY_PROPERTIES, DIV_FOR_MODAL_OVERLAY, BTN_ARROW_UP } from "./consts.js";
 
 export function checkSearchInputValue(e) {
     const ev = e.target;
@@ -14,7 +14,6 @@ export function checkSearchInputValue(e) {
     
         markAsValid(SEARCH_INPUT);
         searchBeers(searchValue);
-        SEARCH_INPUT.value = '';
     }
 }
 
@@ -27,18 +26,30 @@ export function searchBeers(searchValue) {
     })
     .then((data) => {
         clearItemsFromBeerContainer();
-        data.forEach( (elem) => {
-            addNewBeerItem(elem);
-        });
-        BEERS_CONTAINER.firstElementChild.scrollIntoView(false);
 
-        if (data.length) {
-            addToRecentSearches(searchValue);
+        if (!data.length) {
+            return showError(); 
         }
-    })
-    .catch( (e) => {
-        showError();
-    });   
+        
+        if (data.length > 2) {
+            let counter = 0;
+            for (let i = 0; i < data.length; i++) {
+                counter++;
+
+                if (i > 1) break;
+
+                addNewBeerItem(data[i], searchValue, counter);
+            }
+        } else if (data.length) {
+            data.forEach( (elem) => {
+                addNewBeerItem(elem);
+            }); 
+        }
+
+        addLoadMoreButton();
+        addToRecentSearches(searchValue);
+        BEERS_CONTAINER.firstElementChild.scrollIntoView(false);
+    });  
 }
 
 export function markAsValid(input) {
@@ -53,7 +64,7 @@ export function parseBeerData(beerItem) {
     return {
         id: beerItem.id,
         name: beerItem.name,
-        imageUrl: beerItem.image_url,
+        imageUrl: (beerItem.image_url) ? beerItem.image_url : BASIC_BEER_IMG,
         description: beerItem.description,
         price: getBeerPrice(),
     } 
@@ -69,10 +80,11 @@ export function getBeerPrice() {
     return randomInteger(5, 10);
 }
 
-export function addNewBeerItem(elem) {
+export function addNewBeerItem(elem, searchValue, counter) {
     const beerData = parseBeerData(elem);
-    const beerItem = new BeerItem(beerData);
+    const beerItem = new BeerItem(beerData, searchValue);
 
+    BEER_OBJ[searchValue + counter] = beerItem;
     renderBeerItem(beerItem);
 }
 
@@ -85,11 +97,27 @@ export function renderBeerItem(beerItem) {
 }
 
 export function showError() {
-    const divError = document.createElement('div');
+    const divError = document.querySelector(`.${CLASSES.DIV_ERROR}`);
+    const beersContainerParent = BEERS_CONTAINER.parentNode;
 
-    divError.classList.add(`${CLASSES.DIV_ERROR}`);
-    divError.innerHTML = ERROR;
-    BEERS_CONTAINER.append(divError);
+    toggleModal(divError, beersContainerParent);
+}
+
+export function hideModal(div, container) {
+    div.style.display = DISPLAY_PROPERTIES.NONE;
+    container.classList.remove(CLASSES.MODAL_OVERLAY);
+}
+
+export function showWarning() {
+    const divWarning = document.querySelector(`.${CLASSES.DIV_WARNING}`);
+
+    toggleModal(divWarning, DIV_FOR_MODAL_OVERLAY);
+}
+
+export function toggleModal(item, container) {
+    item.style.display = DISPLAY_PROPERTIES.BLOCK;
+    container.classList.add(CLASSES.MODAL_OVERLAY);
+    setTimeout(hideModal.bind(null, item, container), 2000);
 }
 
 export function clearItemsFromBeerContainer() {
@@ -108,4 +136,45 @@ export function addToRecentSearches(searchValue) {
     searchItem.classList.add(`${CLASSES.RECENT_SEARCH}`);
     searchItem.innerHTML = searchValue;
     RECENT_SEARCHES_CONTAINER.append(searchItem);
+}
+
+export function loadMoreItems() {
+    const searchValue = SEARCH_INPUT.value;
+    const urlGetBeerName = `${URL_GET_BEERS}?${URL_PARAMATERS.BEER_NAME}=${searchValue}`;
+
+    fetch(urlGetBeerName)
+    .then((response) => {
+        return response.json();
+    })
+    .then((data) => {
+        if (data.length > 2) {
+            for (let i = 2; i < data.length; i++) {             
+                addNewBeerItem(data[i]);
+            }
+            BEERS_CONTAINER.lastElementChild.scrollIntoView(false);
+        } else {
+            showWarning();
+        }
+    });
+
+    SEARCH_INPUT.value = '';
+}
+
+export function addLoadMoreButton() {
+    const btnLoadMore = document.createElement('button');
+
+    btnLoadMore.id = `${BTNS_IDS.LOAD_MORE}`;
+    btnLoadMore.innerHTML = LOAD_MORE;
+    BEERS_CONTAINER.append(btnLoadMore);
+    btnLoadMore.addEventListener('click', loadMoreItems);
+    addArrow();
+}
+
+export function addArrow() {
+    BTN_ARROW_UP.style.display = DISPLAY_PROPERTIES.BLOCK;
+}
+
+export function navigateToTop() {
+    BEERS_CONTAINER.firstElementChild.scrollIntoView(false);
+    BTN_ARROW_UP.style.display = DISPLAY_PROPERTIES.NONE;
 }

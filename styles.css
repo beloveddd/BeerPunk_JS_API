@@ -14,7 +14,7 @@ body {
     justify-content: space-around;
     align-items: center;
     margin-top: 30px;
-    background-color: rgba(88, 88, 233, 0.7);
+    background-color: rgba(88, 88, 233, 0.5);
     border-radius: 25px;
     color: white;
 }
@@ -25,8 +25,19 @@ body {
     font-size: 3rem;
 }
 
-#favourites {
-    background-color: rgb(245, 245, 245, 1);
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 50;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+#favourites,
+#loadMore {
+    background-color: rgb(255, 255, 104);
     padding: 10px;
     border-radius: 25px;
     color: rgb(58, 58, 58);
@@ -62,13 +73,16 @@ i.search {
     outline: 1px solid red;
 }
 
-.beersContainer {
+#beersContainer {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .divBeer,
-.divError {
-    background-color: rgba(88, 88, 233, 0.7);
+.divError,
+.divWarning {
+    background-color: white;
     width: 20rem;
     margin: 10px auto;
     border: 2px solid rgb(58, 58, 58);
@@ -79,7 +93,7 @@ i.search {
 
 .beerTitle {
     margin: 0 0 5px 0;
-    color: whitesmoke;
+    color: rgb(58, 58, 58);
 }
 
 .divDescr {
@@ -108,9 +122,18 @@ i.search {
     width: 100px;
 }
 
-.divError {
-    background-color: rgb(232, 255, 102);
+.divError,
+.divWarning {
+    display: none;
+    background-color: rgb(255, 104, 104);
     text-align: center;
+    min-height: 50px;
+}
+
+.divWarning {
+    background-color: rgb(255, 255, 104);
+    position: absolute;
+    z-index: 100;
 }
 
 #recentSearches {
@@ -125,4 +148,31 @@ i.search {
     border-radius: 10px;
     padding: 3px;
     margin: 5px;
+}
+
+#loadMore {
+    width: 6rem;
+    margin: 0 auto;
+    background-color: rgb(255, 255, 104);
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#arrowUp {
+    display: none;
+    position: fixed;
+    right: 1%;
+    bottom: 1%;
+    background-color: rgb(255, 255, 104);
+    border: 2px solid rgb(58, 58, 58);
+    border-radius: 50px;
+    width: 50px;
+    height: 30px;
+    text-align: center;
+    padding-top: 10px;
+    color: rgb(58, 58, 58);
 }
