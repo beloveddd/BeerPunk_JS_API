@@ -1,8 +1,11 @@
 import { CLASSES } from "./consts.js";
 
 export class BeerItem {
-    constructor(beerData) {
+    searchValue;
+
+    constructor(beerData, searchValue) {
         Object.assign(this, {...beerData});
+        this.searchValue = searchValue;
     }
 
     getBeerItemHTML() {
