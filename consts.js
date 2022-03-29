@@ -32,7 +32,6 @@ export const URL_GET_BEERS = 'https://api.punkapi.com/v2/beers';
 export const URL_PARAMATERS = {
     BEER_NAME: 'beer_name',
 }
-export const ERROR = 'There were no properties found for the given location!';
 export const CURRENCY = ' €';
 export const LOAD_MORE = 'Load more';
 export const DISPLAY_PROPERTIES = {
