@@ -27,7 +27,11 @@ export const CLASSES = {
     DIV_WARNING: 'divWarning',
     RECENT_SEARCH: 'recentSearch',
     MODAL_OVERLAY: 'modal-overlay',
+    DIV_CONTENT: 'content',
 }
+export const DIV_WARNING = document.querySelector(`.${CLASSES.DIV_WARNING}`);
+export const DIV_ERROR = document.querySelector(`.${CLASSES.DIV_ERROR}`);
+export const DIV_CONTENT = document.querySelector(`.${CLASSES.DIV_CONTENT}`);
 export const ENTER_KEY_CODE = 'Enter';
 export const URL_GET_BEERS = 'https://api.punkapi.com/v2/beers';
 export const URL_PARAMATERS = {
