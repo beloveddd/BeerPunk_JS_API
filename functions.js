@@ -49,7 +49,7 @@ export function searchBeers(searchValue) {
         addLoadMoreButton();
         addToRecentSearches(searchValue);
         BEERS_CONTAINER.firstElementChild.scrollIntoView(false);
-    });  
+    });
 }
 
 export function markAsValid(input) {
@@ -140,8 +140,12 @@ export function addToRecentSearches(searchValue) {
 
 export function loadMoreItems() {
     const searchValue = SEARCH_INPUT.value;
-    const urlGetBeerName = `${URL_GET_BEERS}?${URL_PARAMATERS.BEER_NAME}=${searchValue}`;
 
+    if (!searchValue) {
+        return showWarning();
+    }
+
+    const urlGetBeerName = `${URL_GET_BEERS}?${URL_PARAMATERS.BEER_NAME}=${searchValue}`;
     fetch(urlGetBeerName)
     .then((response) => {
         return response.json();

@@ -109,12 +109,12 @@ i.search {
 .beerPrice {
     margin: 5px 0;
     font-weight: bold;
-    border-top: 1px solid whitesmoke;
-    border-bottom: 1px solid whitesmoke;
+    border-top: 1px solid rgb(58, 58, 58);
+    border-bottom: 1px solid rgb(58, 58, 58);
 }
 
 .beerDescription {
-    border-top: 1px solid whitesmoke;
+    border-top: 1px solid rgb(58, 58, 58);
     font-size: 15px;
 }
 
