@@ -125,6 +125,9 @@ i.search {
 .divError,
 .divWarning {
     display: none;
+    position: fixed;
+    top: 30%;
+    left: 37.3%;
     background-color: rgb(255, 104, 104);
     text-align: center;
     min-height: 50px;
@@ -132,7 +135,6 @@ i.search {
 
 .divWarning {
     background-color: rgb(255, 255, 104);
-    position: absolute;
     z-index: 100;
 }
 
@@ -151,6 +153,7 @@ i.search {
 }
 
 #loadMore {
+    display: none;
     width: 6rem;
     margin: 0 auto;
     background-color: rgb(255, 255, 104);
@@ -160,6 +163,7 @@ i.search {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 #arrowUp {

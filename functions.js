@@ -1,5 +1,5 @@
 import { BeerItem } from "./BeerItem.js";
-import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, LOAD_MORE, DISPLAY_PROPERTIES, DIV_FOR_MODAL_OVERLAY, BTN_ARROW_UP } from "./consts.js";
+import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, LOAD_MORE, DISPLAY_PROPERTIES, DIV_FOR_MODAL_OVERLAY, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE } from "./consts.js";
 
 export function checkSearchInputValue(e) {
     const ev = e.target;
@@ -18,7 +18,8 @@ export function checkSearchInputValue(e) {
 }
 
 export function searchBeers(searchValue) {
-    const urlGetBeerName = `${URL_GET_BEERS}?${URL_PARAMATERS.BEER_NAME}=${searchValue}`;
+    let pageCounter = 1;
+    const urlGetBeerName = `${URL_GET_BEERS}?${URL_PARAMATERS.PAGE}=${pageCounter}&${URL_PARAMATERS.PER_PAGE}=${ITEMS_PER_PAGE}&${URL_PARAMATERS.BEER_NAME}=${searchValue}`;
 
     fetch(urlGetBeerName)
     .then((response) => {
@@ -30,21 +31,11 @@ export function searchBeers(searchValue) {
         if (!data.length) {
             return showError(); 
         }
-        
-        if (data.length > 2) {
-            let counter = 0;
-            for (let i = 0; i < data.length; i++) {
-                counter++;
 
-                if (i > 1) break;
-
-                addNewBeerItem(data[i], searchValue, counter);
-            }
-        } else if (data.length) {
-            data.forEach( (elem) => {
-                addNewBeerItem(elem);
-            }); 
-        }
+        let counter = 0;
+        data.forEach( (elem) => {
+            addNewBeerItem(elem, counter);
+        }); 
 
         addLoadMoreButton();
         addToRecentSearches(searchValue);
@@ -104,7 +95,7 @@ export function showError() {
 }
 
 export function hideModal(div, container) {
-    div.style.display = DISPLAY_PROPERTIES.NONE;
+    setDisplayProperty(div, DISPLAY_PROPERTIES.NONE);
     container.classList.remove(CLASSES.MODAL_OVERLAY);
 }
 
@@ -115,7 +106,7 @@ export function showWarning() {
 }
 
 export function toggleModal(item, container) {
-    item.style.display = DISPLAY_PROPERTIES.BLOCK;
+    setDisplayProperty(item, DISPLAY_PROPERTIES.BLOCK);
     container.classList.add(CLASSES.MODAL_OVERLAY);
     setTimeout(hideModal.bind(null, item, container), 2000);
 }
@@ -138,47 +129,52 @@ export function addToRecentSearches(searchValue) {
     RECENT_SEARCHES_CONTAINER.append(searchItem);
 }
 
-export function loadMoreItems() {
+export function loadMoreItems(pageCounter) {
     const searchValue = SEARCH_INPUT.value;
 
     if (!searchValue) {
         return showWarning();
     }
 
-    const urlGetBeerName = `${URL_GET_BEERS}?${URL_PARAMATERS.BEER_NAME}=${searchValue}`;
+    pageCounter++;
+
+    const urlGetBeerName = `${URL_GET_BEERS}?${URL_PARAMATERS.PAGE}=${pageCounter}&${URL_PARAMATERS.PER_PAGE}=${ITEMS_PER_PAGE}&${URL_PARAMATERS.BEER_NAME}=${searchValue}`;
+
     fetch(urlGetBeerName)
     .then((response) => {
         return response.json();
     })
     .then((data) => {
-        if (data.length > 2) {
-            for (let i = 2; i < data.length; i++) {             
-                addNewBeerItem(data[i]);
-            }
-            BEERS_CONTAINER.lastElementChild.scrollIntoView(false);
-        } else {
-            showWarning();
+        if (!data.length) {
+            return showWarning();
         }
+
+        data.forEach( (elem) => {
+            addNewBeerItem(elem);
+        });           
+        BEERS_CONTAINER.lastElementChild.scrollIntoView(false);
+    })
+    .catch( (e) => {
+        showWarning();
     });
 
     SEARCH_INPUT.value = '';
 }
 
 export function addLoadMoreButton() {
-    const btnLoadMore = document.createElement('button');
-
-    btnLoadMore.id = `${BTNS_IDS.LOAD_MORE}`;
-    btnLoadMore.innerHTML = LOAD_MORE;
-    BEERS_CONTAINER.append(btnLoadMore);
-    btnLoadMore.addEventListener('click', loadMoreItems);
+    setDisplayProperty(BTN_LOAD_MORE, DISPLAY_PROPERTIES.BLOCK);
     addArrow();
 }
 
 export function addArrow() {
-    BTN_ARROW_UP.style.display = DISPLAY_PROPERTIES.BLOCK;
+    setDisplayProperty(BTN_ARROW_UP, DISPLAY_PROPERTIES.BLOCK);
 }
 
 export function navigateToTop() {
     BEERS_CONTAINER.firstElementChild.scrollIntoView(false);
-    BTN_ARROW_UP.style.display = DISPLAY_PROPERTIES.NONE;
+    setDisplayProperty(BTN_ARROW_UP, DISPLAY_PROPERTIES.NONE);
+}
+
+export function setDisplayProperty(item, property) {
+    item.style.display = property;
 }
