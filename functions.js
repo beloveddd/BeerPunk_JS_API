@@ -1,5 +1,5 @@
 import { BeerItem } from "./BeerItem.js";
-import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, DIV_FOR_MODAL_OVERLAY, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV } from "./consts.js";
+import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, DIV_FOR_MODAL_OVERLAY, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV, MODAL_FAVOURITES, DIV_FOR_FAV_BEERS } from "./consts.js";
 
 export function checkSearchInputValue(pageCounter, e) {
     const ev = e.target;
@@ -108,6 +108,7 @@ export function renderBeerItem(beerItem) {
     const divBeer = document.createElement('div');
 
     divBeer.classList.add(`${CLASSES.DIV_BEER}`);
+    divBeer.id = beerItem.id;
     divBeer.innerHTML = beerItem.getBeerItemHTML();
     BEERS_CONTAINER.append(divBeer);
 }
@@ -128,7 +129,10 @@ export function showWarning() {
 export function toggleModal(item, container) {
     setDisplayProperty(item, DISPLAY_PROPERTIES.BLOCK);
     container.classList.add(CLASSES.MODAL_OVERLAY);
-    setTimeout(() => hideModal(item, container), 2000);
+
+    if ( !item.className.includes(CLASSES.MODAL_FAV) ) {
+        setTimeout(() => hideModal(item, container), 2000);
+    }
 }
 
 export function clearItemsFromBeerContainer() {
@@ -173,6 +177,10 @@ export function defineTarget(e) {
     if ( ev.className.includes(CLASSES.FAV_ITEM) || ev.className.includes(CLASSES.NOT_FAV_ITEM) ) {
         addRemoveFavourites(ev);
     }
+
+    if ( ev.className.includes(CLASSES.REMOVE_BTN) ) {
+        removeFavourites(ev);
+    }
 }
 
 export function addRemoveFavourites(ev) {
@@ -180,7 +188,7 @@ export function addRemoveFavourites(ev) {
 
     if (ev.outerText === REMOVE) {
         beerItem.isFavourite = false;
-        FAV_BEERS_ARR.pop(beerItem);
+        deleteElemFromArr(beerItem);
         ev.innerHTML = ADD;
         ev.classList.add(CLASSES.NOT_FAV_ITEM);
         ev.classList.remove(CLASSES.FAV_ITEM);
@@ -206,4 +214,53 @@ export function checkBtnFav() {
     } else {
         BTN_FAV.disabled = true;
     }
+}
+
+export function showFavouriteModal() {
+    toggleModal(MODAL_FAVOURITES, DIV_FOR_MODAL_OVERLAY);
+
+    FAV_BEERS_ARR.forEach( (elem) => {
+        renderBeerPoint(elem);    
+    });
+}
+
+export function renderBeerPoint(elem) {
+    const newBeerPoint = document.createElement('div');
+    const newRemoveBtn = document.createElement('button');
+
+    newBeerPoint.id = elem.id;
+    newBeerPoint.classList = CLASSES.BEER_POINT;
+    newBeerPoint.innerHTML = elem.name;
+    newRemoveBtn.id = elem.id;
+    newRemoveBtn.classList = CLASSES.REMOVE_BTN;
+    newRemoveBtn.innerHTML = REMOVE;
+    newBeerPoint.append(newRemoveBtn);
+    DIV_FOR_FAV_BEERS.append(newBeerPoint);
+}
+
+export function closeFavouritesModal() {
+    setDisplayProperty(MODAL_FAVOURITES, DISPLAY_PROPERTIES.NONE);
+    DIV_FOR_MODAL_OVERLAY.classList.remove(CLASSES.MODAL_OVERLAY);
+    Array.from(DIV_FOR_FAV_BEERS.children).forEach( (elem) => elem.remove());
+}
+
+export function removeFavourites(ev) {
+    const beerItem = Object.values(BEER_OBJ).find((elem) => elem.id === +ev.id);
+    const divTarget = Array.from(BEERS_CONTAINER.children).find((elem) => elem.id === ev.id);
+    const itemToDeleteHTML = Array.from(DIV_FOR_FAV_BEERS.children).find((elem) => elem.id === ev.id);
+
+    //changing the button in the BEERS_CONTAINER
+    beerItem.isFavourite = false;
+    divTarget.innerHTML = beerItem.getBeerItemHTML();
+    //deleting from the MODAL_FAVOURITES
+    itemToDeleteHTML.remove();
+    //deleting from the FAV_BEERS_ARR
+    deleteElemFromArr(beerItem);
+    updateCounterFav();
+    checkBtnFav();
+}
+
+export function deleteElemFromArr(beerItem) {
+    const indexOfItemToDelete = FAV_BEERS_ARR.indexOf(beerItem);
+    FAV_BEERS_ARR.splice(indexOfItemToDelete, 1);
 }

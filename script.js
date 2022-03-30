@@ -1,5 +1,5 @@
-import { BEERS_CONTAINER, BTN_ARROW_UP, BTN_LOAD_MORE, BTN_SEARCH, CLASSES, RECENT_SEARCHES_CONTAINER, SEARCH_INPUT } from "./consts.js";
-import { addArrow, checkSearchInputValue, navigateToTop, defineTarget } from "./functions.js";
+import { BEERS_CONTAINER, BTN_ARROW_UP, BTN_CLOSE_MODAL, BTN_FAV, BTN_LOAD_MORE, BTN_SEARCH, CLASSES, RECENT_SEARCHES_CONTAINER, SEARCH_INPUT, MODAL_FAVOURITES } from "./consts.js";
+import { addArrow, checkSearchInputValue, navigateToTop, defineTarget, showFavouriteModal, closeFavouritesModal } from "./functions.js";
 
 let pageCounter = 1;
 
@@ -29,3 +29,6 @@ RECENT_SEARCHES_CONTAINER.addEventListener('click', function searchByRecentSearc
     checkSearchInputValue(pageCounter, e);
 });
 BEERS_CONTAINER.addEventListener('click', defineTarget);
+BTN_FAV.addEventListener('click', showFavouriteModal);
+BTN_CLOSE_MODAL.addEventListener('click', closeFavouritesModal);
+MODAL_FAVOURITES.addEventListener('click', defineTarget);

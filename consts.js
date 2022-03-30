@@ -2,6 +2,7 @@ export const SEARCH_INPUT = document.querySelector('#searchInput');
 export const RECENT_SEARCHES_CONTAINER = document.querySelector('#recentSearches');
 export const BEERS_CONTAINER = document.querySelector('#beersContainer');
 export const DIV_FOR_MODAL_OVERLAY = document.querySelector('.forModalOverlay');
+export const DIV_FOR_FAV_BEERS = document.querySelector('#divForFavBeers');
 export const BEER_OBJ = {};
 export const FAV_BEERS_ARR = [];
 export const BASIC_BEER_IMG = 'https://images.punkapi.com/v2/keg.png';
@@ -10,7 +11,9 @@ export const BTNS_IDS = {
     SEARCH: 'search',
     LOAD_MORE: 'loadMore',
     ARROW_UP: 'arrowUp',
+    CLOSE_MODAL: 'closeModal',
 }
+export const BTN_CLOSE_MODAL = document.querySelector(`#${BTNS_IDS.CLOSE_MODAL}`);
 export const BTN_FAV = document.querySelector(`#${BTNS_IDS.FAVOURITES}`);
 export const BTN_SEARCH = document.querySelector(`#${BTNS_IDS.SEARCH}`);
 export const BTN_LOAD_MORE = document.querySelector(`#${BTNS_IDS.LOAD_MORE}`);
@@ -33,7 +36,11 @@ export const CLASSES = {
     FAV_ITEM: 'favouriteItem',
     NOT_FAV_ITEM: 'notFavouriteItem',
     COUNTER_FAV: 'counterFav',
+    MODAL_FAV: 'divFavourites',
+    BEER_POINT: 'beerPoint',
+    REMOVE_BTN: 'removeBtn',
 }
+export const MODAL_FAVOURITES = document.querySelector(`.${CLASSES.MODAL_FAV}`);
 export const DIV_WARNING = document.querySelector(`.${CLASSES.DIV_WARNING}`);
 export const DIV_ERROR = document.querySelector(`.${CLASSES.DIV_ERROR}`);
 export const DIV_CONTENT = document.querySelector(`.${CLASSES.DIV_CONTENT}`);
