@@ -1,14 +1,15 @@
-import { CLASSES } from "./consts.js";
+import { ADD, CLASSES, REMOVE } from "./consts.js";
 
 export class BeerItem {
-    searchValue;
 
-    constructor(beerData, searchValue) {
+    constructor(beerData) {
         Object.assign(this, {...beerData});
-        this.searchValue = searchValue;
     }
 
     getBeerItemHTML() {
+        const classBtn = this.isFavourite ? CLASSES.FAV_ITEM : CLASSES.NOT_FAV_ITEM;
+        const textBtn = this.isFavourite ? REMOVE : ADD;
+
         return `
         <div id="${this.id}" class="${CLASSES.BEER_ITEM}">
             <h3 class="${CLASSES.BEER_TITLE}">Beer: ${this.name}</h3>
@@ -17,9 +18,11 @@ export class BeerItem {
                 <div class="${CLASSES.DIV_PR}">
                     <div class="${CLASSES.BEER_DESCRIPTION}">${this.description}</div>
                     <div class="${CLASSES.BEER_PRICE}">Price: ${this.price}</div>
+                    <button id="${this.id}" class="${classBtn}">${textBtn}</button>
                 </div>
             </div>
         </div>
         `;
     }
 }
+

@@ -35,9 +35,15 @@ body {
     background: rgba(0, 0, 0, 0.6);
 }
 
+#favourites {
+    position: relative;
+}
+
 #favourites,
-#loadMore {
-    background-color: rgb(255, 255, 104);
+#loadMore,
+.notFavouriteItem,
+.favouriteItem  {
+    background-color: rgb(255, 93, 93);
     padding: 10px;
     border-radius: 25px;
     color: rgb(58, 58, 58);
@@ -48,8 +54,15 @@ body {
 #favourites:hover,
 .recentSearch:hover,
 #loadMore:hover,
-#arrowUp:hover {
+#arrowUp:hover,
+.notFavouriteItem:hover,
+.favouriteItem:hover,
+#favourites:disabled {
     background-color: rgb(245, 245, 245, 0.5);
+}
+
+#favourites:disabled {
+    cursor: auto;
 }
 
 #searchContainer {
@@ -183,4 +196,33 @@ i.search {
     text-align: center;
     padding-top: 10px;
     color: rgb(58, 58, 58);
+}
+
+.notFavouriteItem,
+.favouriteItem  {
+    width: 85px;
+    margin: 15px auto;
+}
+
+.favouriteItem {
+    background-color: rgb(255, 93, 93);
+}
+
+.notFavouriteItem,
+#favourites {
+    background-color: rgb(255, 255, 104);
+}
+
+.counterFav {
+    border-radius: 30px;
+    background-color: rgb(71, 194, 71);
+    min-width: 16px;
+    min-height: 16px;
+    padding: 3px 4px 3px 4px;
+    text-align: center;
+    font-size: 12px;
+    position: absolute;
+    top: 58%;
+    right: -11%;
+    color: whitesmoke;
 }

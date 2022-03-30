@@ -1,5 +1,5 @@
 import { BeerItem } from "./BeerItem.js";
-import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, LOAD_MORE, DISPLAY_PROPERTIES, DIV_FOR_MODAL_OVERLAY, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT } from "./consts.js";
+import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, DIV_FOR_MODAL_OVERLAY, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV } from "./consts.js";
 
 export function checkSearchInputValue(pageCounter, e) {
     const ev = e.target;
@@ -73,12 +73,16 @@ export function markAsInvalid(input) {
 }
 
 export function parseBeerData(beerItem) {
+    const item = Object.values(BEER_OBJ).find( (elem) => elem.id === beerItem.id);
+    const price = item ? item.price : getBeerPrice();
+    
     return {
+        isFavourite: FAV_BEERS_ARR.some( (elem) => elem.id === beerItem.id),
         id: beerItem.id,
         name: beerItem.name,
         imageUrl: (beerItem.image_url) ? beerItem.image_url : BASIC_BEER_IMG,
         description: beerItem.description,
-        price: getBeerPrice(),
+        price
     } 
 }
 
@@ -161,4 +165,45 @@ export function navigateToTop() {
 
 export function setDisplayProperty(item, property) {
     item.style.display = property;
+}
+
+export function defineTarget(e) {
+    const ev = e.target;
+
+    if ( ev.className.includes(CLASSES.FAV_ITEM) || ev.className.includes(CLASSES.NOT_FAV_ITEM) ) {
+        addRemoveFavourites(ev);
+    }
+}
+
+export function addRemoveFavourites(ev) {
+    const beerItem = Object.values(BEER_OBJ).find((elem) => elem.id === +ev.id);
+
+    if (ev.outerText === REMOVE) {
+        beerItem.isFavourite = false;
+        FAV_BEERS_ARR.pop(beerItem);
+        ev.innerHTML = ADD;
+        ev.classList.add(CLASSES.NOT_FAV_ITEM);
+        ev.classList.remove(CLASSES.FAV_ITEM);
+    } else {
+        beerItem.isFavourite = true;
+        FAV_BEERS_ARR.push(beerItem);
+        ev.innerHTML = REMOVE;
+        ev.classList.add(CLASSES.FAV_ITEM);
+        ev.classList.remove(CLASSES.NOT_FAV_ITEM);
+    }
+
+    updateCounterFav();
+    checkBtnFav();
+}
+
+export function updateCounterFav() {
+    DIV_COUNTER_FAV.innerHTML = FAV_BEERS_ARR.length;
+}
+
+export function checkBtnFav() {
+    if (FAV_BEERS_ARR.length) {
+        BTN_FAV.disabled = false;
+    } else {
+        BTN_FAV.disabled = true;
+    }
 }
