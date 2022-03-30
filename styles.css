@@ -97,7 +97,8 @@ i.search {
 
 .divBeer,
 .divError,
-.divWarning {
+.divWarning,
+.divFavourites {
     background-color: white;
     width: 20rem;
     margin: 10px auto;
@@ -139,8 +140,9 @@ i.search {
 }
 
 .divError,
-.divWarning {
-    display: none;
+.divWarning,
+.divFavourites {
+    /* display: none; */
     position: fixed;
     top: 30%;
     left: 37.3%;
@@ -151,6 +153,11 @@ i.search {
 
 .divWarning {
     background-color: rgb(255, 255, 104);
+    z-index: 100;
+}
+
+.divFavourites {
+    background-color: white;
     z-index: 100;
 }
 
@@ -225,4 +232,12 @@ i.search {
     top: 58%;
     right: -11%;
     color: whitesmoke;
+}
+
+#closeModal {
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    font-weight: bold;
+    top: 5px;
 }
