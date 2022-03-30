@@ -45,7 +45,10 @@ body {
     font-weight: bolder;
 }
 
-#favourites:hover {
+#favourites:hover,
+.recentSearch:hover,
+#loadMore:hover,
+#arrowUp:hover {
     background-color: rgb(245, 245, 245, 0.5);
 }
 
@@ -150,6 +153,7 @@ i.search {
     border-radius: 10px;
     padding: 3px;
     margin: 5px;
+    cursor: pointer;
 }
 
 #loadMore {
