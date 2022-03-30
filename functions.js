@@ -13,7 +13,7 @@ export function checkSearchInputValue(pageCounter, e) {
         searchBeers(searchValue, pageCounter);
     }
 
-    if (e.key === ENTER_KEY_CODE || ev.className.includes(BTNS_IDS.SEARCH)) {
+    if (e.key === ENTER_KEY_CODE || ev.className.includes(BTNS_IDS.SEARCH) || ev.className.includes(CLASSES.RECENT_SEARCH)) {
         if (!searchValue) {
             return markAsInvalid(SEARCH_INPUT);
         }
@@ -32,7 +32,6 @@ export function searchBeers(searchValue, pageCounter) {
         return response.json();
     })
     .then((data) => {
-
         if (pageCounter === 1) {
             clearItemsFromBeerContainer();
             setDisplayProperty(BTN_LOAD_MORE, DISPLAY_PROPERTIES.NONE);
