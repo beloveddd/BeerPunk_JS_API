@@ -4,6 +4,7 @@ import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PAR
 export function checkSearchInputValue(pageCounter, e) {
     const ev = e.target;
     const searchValue = SEARCH_INPUT.value;
+    const conditionsForFindingBeers = e.key === ENTER_KEY_CODE || ev.className.includes(BTNS_IDS.SEARCH) || ev.className.includes(CLASSES.RECENT_SEARCH);
 
     if (ev.id.includes(BTNS_IDS.LOAD_MORE)) {
         if (!searchValue) {
@@ -13,7 +14,7 @@ export function checkSearchInputValue(pageCounter, e) {
         searchBeers(searchValue, pageCounter);
     }
 
-    if (e.key === ENTER_KEY_CODE || ev.className.includes(BTNS_IDS.SEARCH) || ev.className.includes(CLASSES.RECENT_SEARCH)) {
+    if (conditionsForFindingBeers) {
         if (!searchValue) {
             return markAsInvalid(SEARCH_INPUT);
         }
