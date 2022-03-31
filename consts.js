@@ -68,4 +68,4 @@ export const DISPLAY_PROPERTIES = {
 }
 export const RECENT_SEARCHES_KEY = 'recentSearches';
 export const FAVOURITE_BEERS_KEY = 'favouriteBeers';
-export const IMG_PATH = '../images/punk.png';
+export const IMG_PATH = 'images/punk.png';
