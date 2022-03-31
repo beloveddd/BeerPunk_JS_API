@@ -42,6 +42,7 @@ export const CLASSES = {
     BEER_POINT: 'beerPoint',
     REMOVE_BTN: 'removeBtn',
     MODAL_BEER_ITEM: 'forBeerItemModal',
+    PUNK_LITTLE: 'punkLittle',
 }
 export const MODAL_FAVOURITES = document.querySelector(`.${CLASSES.MODAL_FAV}`);
 export const DIV_WARNING = document.querySelector(`.${CLASSES.DIV_WARNING}`);
@@ -67,3 +68,4 @@ export const DISPLAY_PROPERTIES = {
 }
 export const RECENT_SEARCHES_KEY = 'recentSearches';
 export const FAVOURITE_BEERS_KEY = 'favouriteBeers';
+export const IMG_PATH = '/images/punk.png';

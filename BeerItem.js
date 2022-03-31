@@ -1,4 +1,4 @@
-import { ADD, CLASSES, REMOVE } from "./consts.js";
+import { ADD, CLASSES, IMG_PATH, REMOVE } from "./consts.js";
 
 export class BeerItem {
 
@@ -19,6 +19,7 @@ export class BeerItem {
                     <div class="${CLASSES.BEER_DESCRIPTION}">${this.description}</div>
                     <div class="${CLASSES.BEER_PRICE}">Price: ${this.price}</div>
                     <button id="${this.id}" class="${classBtn}">${textBtn}</button>
+                    <img src="${IMG_PATH}" class="${CLASSES.PUNK_LITTLE}">
                 </div>
             </div>
         </div>
@@ -39,10 +40,10 @@ export class BeerItem {
                     <div class="${CLASSES.BEER_DESCRIPTION}">Abv: ${this.abv}</div>
                     <div class="${CLASSES.BEER_DESCRIPTION}">Food pairing: ${this.foodPairing}</div>
                     <button id="${this.id}" class="${classBtn}">${textBtn}</button>
+                    <img src="${IMG_PATH}" class="${CLASSES.PUNK_LITTLE}">
                 </div>
             </div>
         </div>
         `;
     }
 }
-
