@@ -1,8 +1,8 @@
 export const SEARCH_INPUT = document.querySelector('#searchInput');
 export const RECENT_SEARCHES_CONTAINER = document.querySelector('#recentSearches');
 export const BEERS_CONTAINER = document.querySelector('#beersContainer');
-export const DIV_FOR_MODAL_OVERLAY = document.querySelector('.forModalOverlay');
-export const DIV_FOR_FAV_BEERS = document.querySelector('#divForFavBeers');
+export const MODAL_OVERLAY_CONTAINER = document.querySelector('.forModalOverlay');
+export const FAV_BEERS_CONTAINER = document.querySelector('#divForFavBeers');
 export const BEER_OBJ = {};
 export const FAV_BEERS_ARR = [];
 export const BASIC_BEER_IMG = 'https://images.punkapi.com/v2/keg.png';
