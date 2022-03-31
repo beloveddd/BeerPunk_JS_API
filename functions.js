@@ -1,5 +1,5 @@
 import { BeerItem } from "./BeerItem.js";
-import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, MODAL_OVERLAY_CONTAINER, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV, MODAL_FAVOURITES, FAV_BEERS_CONTAINER, BEER_ITEM_MODAL, ESC_KEY_CODE, RECENT_SEARCHES_OBJ } from "./consts.js";
+import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, MODAL_OVERLAY_CONTAINER, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV, MODAL_FAVOURITES, FAV_BEERS_CONTAINER, BEER_ITEM_MODAL, ESC_KEY_CODE, RECENT_SEARCHES_OBJ, RECENT_SEARCHES_KEY, FAVOURITE_BEERS_KEY } from "./consts.js";
 
 export function checkSearchInputValue(pageCounter, e) {
     const ev = e.target;
@@ -81,7 +81,6 @@ export function parseBeerData(beerItem) {
         isFavourite: FAV_BEERS_ARR.some( (elem) => elem.id === beerItem.id),
         abv: beerItem.abv,
         foodPairing: beerItem.food_pairing,
-        ingredients: beerItem.ingredients,
         id: beerItem.id,
         name: beerItem.name,
         imageUrl: (beerItem.image_url) ? beerItem.image_url : BASIC_BEER_IMG,
@@ -277,6 +276,7 @@ export function removeFavourites(ev) {
     findBeerItem(beerItem);
     updateCounterFav();
     checkBtnFav();
+    saveToLocalStorage({...FAV_BEERS_ARR});
 }
 
 export function deleteElemFromArr(beerItem) {
@@ -311,10 +311,10 @@ export function findBeerItem(beerItem) {
 
 export function saveToLocalStorage(obj) {
     if (obj === RECENT_SEARCHES_OBJ) {
-        window.localStorage.setItem( "recentSearches", JSON.stringify(obj) );
+        window.localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(obj));
+    } else {
+        window.localStorage.setItem(FAVOURITE_BEERS_KEY, JSON.stringify(obj));
     }
-
-    console.log(obj);
-
-    // window.localStorage.setItem( "favouriteBeers", JSON.stringify(obj) );
 }
+
+export function 

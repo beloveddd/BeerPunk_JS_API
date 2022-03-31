@@ -65,3 +65,5 @@ export const DISPLAY_PROPERTIES = {
     BLOCK: 'block',
     NONE: 'none',
 }
+export const RECENT_SEARCHES_KEY = 'recentSearches';
+export const FAVOURITE_BEERS_KEY = 'favouriteBeers';
