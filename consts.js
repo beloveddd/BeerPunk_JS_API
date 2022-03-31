@@ -6,6 +6,7 @@ export const FAV_BEERS_CONTAINER = document.querySelector('#divForFavBeers');
 export const BEER_ITEM_MODAL = document.querySelector('.forBeerItemModal');
 export const BEER_OBJ = {};
 export const FAV_BEERS_ARR = [];
+export const RECENT_SEARCHES_OBJ = {};
 export const BASIC_BEER_IMG = 'https://images.punkapi.com/v2/keg.png';
 export const BTNS_IDS = {
     FAVOURITES: 'favourites',

@@ -1,5 +1,5 @@
 import { BeerItem } from "./BeerItem.js";
-import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, MODAL_OVERLAY_CONTAINER, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV, MODAL_FAVOURITES, FAV_BEERS_CONTAINER, BEER_ITEM_MODAL, ESC_KEY_CODE } from "./consts.js";
+import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, MODAL_OVERLAY_CONTAINER, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV, MODAL_FAVOURITES, FAV_BEERS_CONTAINER, BEER_ITEM_MODAL, ESC_KEY_CODE, RECENT_SEARCHES_OBJ } from "./consts.js";
 
 export function checkSearchInputValue(pageCounter, e) {
     const ev = e.target;
@@ -155,6 +155,8 @@ export function addToRecentSearches(searchValue) {
     searchItem.classList.add(`${CLASSES.RECENT_SEARCH}`);
     searchItem.innerHTML = searchValue;
     RECENT_SEARCHES_CONTAINER.append(searchItem);
+    RECENT_SEARCHES_OBJ[searchValue] = searchValue;
+    saveToLocalStorage(RECENT_SEARCHES_OBJ);
 }
 
 export function addLoadMoreButton() {
@@ -217,6 +219,7 @@ export function addRemoveFavourites(ev) {
         findBeerItem(beerItem);
     }
 
+    saveToLocalStorage({...FAV_BEERS_ARR});
     updateCounterFav();
     checkBtnFav();
 }
@@ -285,6 +288,7 @@ export function showBeerItemModal(ev) {
     const beerItem = Object.values(BEER_OBJ).find((elem) => elem.id === +ev.parentNode.id);
 
     toggleModal(BEER_ITEM_MODAL, MODAL_OVERLAY_CONTAINER);
+    searchBeers();
     BEER_ITEM_MODAL.innerHTML = beerItem.getExtraBeerItemHTML();
 }
 
@@ -303,4 +307,14 @@ export function closeBeerItemModal() {
 export function findBeerItem(beerItem) {
     const divTarget = Array.from(BEERS_CONTAINER.children).find((elem) => +elem.id === beerItem.id);
     divTarget.innerHTML = beerItem.getBeerItemHTML();
+}
+
+export function saveToLocalStorage(obj) {
+    if (obj === RECENT_SEARCHES_OBJ) {
+        window.localStorage.setItem( "recentSearches", JSON.stringify(obj) );
+    }
+
+    console.log(obj);
+
+    // window.localStorage.setItem( "favouriteBeers", JSON.stringify(obj) );
 }
