@@ -306,6 +306,9 @@ export function closeBeerItemModal() {
 
 export function findBeerItem(beerItem) {
     const divTarget = Array.from(BEERS_CONTAINER.children).find((elem) => +elem.id === beerItem.id);
+
+    if(!divTarget) return;
+
     divTarget.innerHTML = beerItem.getBeerItemHTML();
 }
 
@@ -317,4 +320,23 @@ export function saveToLocalStorage(obj) {
     }
 }
 
-export function 
+export function initRecentSearchesLocalStorage() {
+    if (!window.localStorage.getItem(RECENT_SEARCHES_KEY)) return;
+
+    const localRecentSearches = JSON.parse(window.localStorage.getItem(RECENT_SEARCHES_KEY));
+
+    Object.keys(localRecentSearches).forEach( (elem) => addToRecentSearches(elem));
+}
+
+export function initFavBeersLocalStorage() {
+    if (!window.localStorage.getItem(FAVOURITE_BEERS_KEY)) return;
+
+    const localFavBeers = JSON.parse(window.localStorage.getItem(FAVOURITE_BEERS_KEY));
+
+    Object.values(localFavBeers).forEach( (elem) => {
+        FAV_BEERS_ARR.push(elem);
+        BEER_OBJ[elem.id] = elem
+    });
+    updateCounterFav();
+    checkBtnFav();
+}
