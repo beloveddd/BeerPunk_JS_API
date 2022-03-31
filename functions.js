@@ -181,6 +181,10 @@ export function defineTarget(e) {
     if ( ev.className.includes(CLASSES.REMOVE_BTN) ) {
         removeFavourites(ev);
     }
+
+    if ( ev.className.includes(CLASSES.BEER_TITLE) ) {
+        showBeerItemModal(ev);
+    }
 }
 
 export function addRemoveFavourites(ev) {
@@ -263,4 +267,9 @@ export function removeFavourites(ev) {
 export function deleteElemFromArr(beerItem) {
     const indexOfItemToDelete = FAV_BEERS_ARR.indexOf(beerItem);
     FAV_BEERS_ARR.splice(indexOfItemToDelete, 1);
+}
+
+export function showBeerItemModal(ev) {
+    const beerItem = Object.values(BEER_OBJ).find((elem) => elem.id === +ev.id);
+    
 }
