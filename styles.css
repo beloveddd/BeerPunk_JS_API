@@ -118,7 +118,7 @@ i.search {
 .divFavourites,
 .forBeerItemModal {
     background-color: white;
-    width: 20rem;
+    width: 21rem;
     margin: 10px auto;
     border: 2px solid rgb(58, 58, 58);
     border-radius: 15px;
@@ -154,7 +154,9 @@ i.search {
 }
 
 .beerImg {
+    height: 250px;
     width: 100px;
+    margin: 5px 15px 5px 0;
 }
 
 .divError,
@@ -187,7 +189,7 @@ i.search {
 }
 
 #recentSearches {
-    width: 20rem;
+    width: 21rem;
     margin: 10px auto;
     font-weight: 600;
 }

@@ -32,7 +32,7 @@ export class BeerItem {
 
         return `
         <div id="${this.id}" class="${CLASSES.BEER_ITEM}">
-            <h3 class="${CLASSES.BEER_TITLE}">Beer: ${this.name}</h3>
+            <h3>Beer: ${this.name}</h3>
             <div class="${CLASSES.DIV_DESCR}">
                 <img class="${CLASSES.BEER_IMG}" src="${this.imageUrl}" alt="${this.name}">
                 <div class="${CLASSES.DIV_PR}">

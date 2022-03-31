@@ -1,5 +1,5 @@
 import { BeerItem } from "./BeerItem.js";
-import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, MODAL_OVERLAY_CONTAINER, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV, MODAL_FAVOURITES, FAV_BEERS_CONTAINER, BEER_ITEM_MODAL, ESC_KEY_CODE, RECENT_SEARCHES_OBJ, RECENT_SEARCHES_KEY, FAVOURITE_BEERS_KEY } from "./consts.js";
+import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, MODAL_OVERLAY_CONTAINER, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_OBJ, DIV_COUNTER_FAV, BTN_FAV, MODAL_FAVOURITES, FAV_BEERS_CONTAINER, BEER_ITEM_MODAL, ESC_KEY_CODE, RECENT_SEARCHES_OBJ, RECENT_SEARCHES_KEY, FAVOURITE_BEERS_KEY } from "./consts.js";
 
 export function checkSearchInputValue(pageCounter, e) {
     const ev = e.target;
@@ -78,7 +78,7 @@ export function parseBeerData(beerItem) {
     const price = item ? item.price : getBeerPrice();
     
     return {
-        isFavourite: FAV_BEERS_ARR.some( (elem) => elem.id === beerItem.id),
+        isFavourite: Object.values(FAV_BEERS_OBJ).some( (elem) => elem.id === beerItem.id),
         abv: beerItem.abv,
         foodPairing: beerItem.food_pairing,
         id: beerItem.id,
@@ -208,7 +208,7 @@ export function addRemoveFavourites(ev) {
         ev.classList.remove(CLASSES.FAV_ITEM);
     } else {
         beerItem.isFavourite = true;
-        FAV_BEERS_ARR.push(beerItem);
+        FAV_BEERS_OBJ[beerItem.id] = beerItem;
         ev.innerHTML = REMOVE;
         ev.classList.add(CLASSES.FAV_ITEM);
         ev.classList.remove(CLASSES.NOT_FAV_ITEM);
@@ -218,23 +218,23 @@ export function addRemoveFavourites(ev) {
         findBeerItem(beerItem);
     }
 
-    saveToLocalStorage({...FAV_BEERS_ARR});
+    saveToLocalStorage(FAV_BEERS_OBJ);
     updateCounterFav();
     checkBtnFav();
 }
 
 export function updateCounterFav() {
-    DIV_COUNTER_FAV.innerHTML = FAV_BEERS_ARR.length;
+    DIV_COUNTER_FAV.innerHTML = Object.keys(FAV_BEERS_OBJ).length;
 }
 
 export function checkBtnFav() {
-    FAV_BEERS_ARR.length ? BTN_FAV.disabled = false : BTN_FAV.disabled = true;
+    Object.keys(FAV_BEERS_OBJ).length ? BTN_FAV.disabled = false : BTN_FAV.disabled = true;
 }
 
 export function showFavouriteModal() {
     toggleModal(MODAL_FAVOURITES, MODAL_OVERLAY_CONTAINER);
 
-    FAV_BEERS_ARR.forEach( (elem) => {
+    Object.values(FAV_BEERS_OBJ).forEach( (elem) => {
         renderBeerPoint(elem);    
     });
 }
@@ -267,18 +267,16 @@ export function removeFavourites(ev) {
     beerItem.isFavourite = false;
     //deleting from the MODAL_FAVOURITES
     itemToDeleteHTML.remove();
-    //deleting from the FAV_BEERS_ARR
+    //deleting from the FAV_BEERS_OBJ
     deleteElemFromArr(beerItem);
     findBeerItem(beerItem);
     updateCounterFav();
     checkBtnFav();
-    saveToLocalStorage({...FAV_BEERS_ARR});
+    saveToLocalStorage(FAV_BEERS_OBJ);
 }
 
 export function deleteElemFromArr(beerItem) {
-    const indexOfItemToDelete = FAV_BEERS_ARR.indexOf(beerItem);
-
-    FAV_BEERS_ARR.splice(indexOfItemToDelete, 1);
+    delete FAV_BEERS_OBJ[beerItem.id];
 }
 
 export function showBeerItemModal(ev) {
@@ -324,8 +322,8 @@ export function initFavBeersLocalStorage() {
     const localFavBeers = JSON.parse(window.localStorage.getItem(FAVOURITE_BEERS_KEY));
 
     Object.values(localFavBeers).forEach( (elem) => {
-        FAV_BEERS_ARR.push(elem);
-        BEER_OBJ[elem.id] = elem;
+        FAV_BEERS_OBJ[elem.id] = new BeerItem(elem);
+        BEER_OBJ[elem.id] = new BeerItem(elem);
     });
     updateCounterFav();
     checkBtnFav();
