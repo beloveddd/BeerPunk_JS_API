@@ -1,5 +1,5 @@
 import { BeerItem } from "./BeerItem.js";
-import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, DIV_FOR_MODAL_OVERLAY, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV, MODAL_FAVOURITES, DIV_FOR_FAV_BEERS } from "./consts.js";
+import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, MODAL_OVERLAY_CONTAINER, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV, MODAL_FAVOURITES, FAV_BEERS_CONTAINER } from "./consts.js";
 
 export function checkSearchInputValue(pageCounter, e) {
     const ev = e.target;
@@ -123,7 +123,7 @@ export function hideModal(div, container) {
 }
 
 export function showWarning() {
-    toggleModal(DIV_WARNING, DIV_FOR_MODAL_OVERLAY);
+    toggleModal(DIV_WARNING, MODAL_OVERLAY_CONTAINER);
 }
 
 export function toggleModal(item, container) {
@@ -217,7 +217,7 @@ export function checkBtnFav() {
 }
 
 export function showFavouriteModal() {
-    toggleModal(MODAL_FAVOURITES, DIV_FOR_MODAL_OVERLAY);
+    toggleModal(MODAL_FAVOURITES, MODAL_OVERLAY_CONTAINER);
 
     FAV_BEERS_ARR.forEach( (elem) => {
         renderBeerPoint(elem);    
@@ -235,19 +235,19 @@ export function renderBeerPoint(elem) {
     newRemoveBtn.classList = CLASSES.REMOVE_BTN;
     newRemoveBtn.innerHTML = REMOVE;
     newBeerPoint.append(newRemoveBtn);
-    DIV_FOR_FAV_BEERS.append(newBeerPoint);
+    FAV_BEERS_CONTAINER.append(newBeerPoint);
 }
 
 export function closeFavouritesModal() {
     setDisplayProperty(MODAL_FAVOURITES, DISPLAY_PROPERTIES.NONE);
-    DIV_FOR_MODAL_OVERLAY.classList.remove(CLASSES.MODAL_OVERLAY);
-    Array.from(DIV_FOR_FAV_BEERS.children).forEach( (elem) => elem.remove());
+    MODAL_OVERLAY_CONTAINER.classList.remove(CLASSES.MODAL_OVERLAY);
+    Array.from(FAV_BEERS_CONTAINER.children).forEach( (elem) => elem.remove());
 }
 
 export function removeFavourites(ev) {
     const beerItem = Object.values(BEER_OBJ).find((elem) => elem.id === +ev.id);
     const divTarget = Array.from(BEERS_CONTAINER.children).find((elem) => elem.id === ev.id);
-    const itemToDeleteHTML = Array.from(DIV_FOR_FAV_BEERS.children).find((elem) => elem.id === ev.id);
+    const itemToDeleteHTML = Array.from(FAV_BEERS_CONTAINER.children).find((elem) => elem.id === ev.id);
 
     //changing the button in the BEERS_CONTAINER
     beerItem.isFavourite = false;
