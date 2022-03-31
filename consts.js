@@ -6,6 +6,7 @@ export const FAV_BEERS_CONTAINER = document.querySelector('#divForFavBeers');
 export const BEER_ITEM_MODAL = document.querySelector('.forBeerItemModal');
 export const BEER_OBJ = {};
 export const FAV_BEERS_ARR = [];
+export const RECENT_SEARCHES_OBJ = {};
 export const BASIC_BEER_IMG = 'https://images.punkapi.com/v2/keg.png';
 export const BTNS_IDS = {
     FAVOURITES: 'favourites',
@@ -41,6 +42,7 @@ export const CLASSES = {
     BEER_POINT: 'beerPoint',
     REMOVE_BTN: 'removeBtn',
     MODAL_BEER_ITEM: 'forBeerItemModal',
+    PUNK_LITTLE: 'punkLittle',
 }
 export const MODAL_FAVOURITES = document.querySelector(`.${CLASSES.MODAL_FAV}`);
 export const DIV_WARNING = document.querySelector(`.${CLASSES.DIV_WARNING}`);
@@ -64,3 +66,6 @@ export const DISPLAY_PROPERTIES = {
     BLOCK: 'block',
     NONE: 'none',
 }
+export const RECENT_SEARCHES_KEY = 'recentSearches';
+export const FAVOURITE_BEERS_KEY = 'favouriteBeers';
+export const IMG_PATH = '/images/punk.png';

@@ -1,5 +1,5 @@
 import { BeerItem } from "./BeerItem.js";
-import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, MODAL_OVERLAY_CONTAINER, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV, MODAL_FAVOURITES, FAV_BEERS_CONTAINER, BEER_ITEM_MODAL, ESC_KEY_CODE } from "./consts.js";
+import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, MODAL_OVERLAY_CONTAINER, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV, MODAL_FAVOURITES, FAV_BEERS_CONTAINER, BEER_ITEM_MODAL, ESC_KEY_CODE, RECENT_SEARCHES_OBJ, RECENT_SEARCHES_KEY, FAVOURITE_BEERS_KEY } from "./consts.js";
 
 export function checkSearchInputValue(pageCounter, e) {
     const ev = e.target;
@@ -48,7 +48,7 @@ export function searchBeers(searchValue, pageCounter) {
             data.forEach( (elem) => {
                 addNewBeerItem(elem);
             });
-            BEERS_CONTAINER.firstElementChild.scrollIntoView(false);
+            BEERS_CONTAINER.firstElementChild.scrollIntoView();
         } else {
             if (!data.length) {
                 SEARCH_INPUT.value = '';
@@ -81,7 +81,6 @@ export function parseBeerData(beerItem) {
         isFavourite: FAV_BEERS_ARR.some( (elem) => elem.id === beerItem.id),
         abv: beerItem.abv,
         foodPairing: beerItem.food_pairing,
-        ingredients: beerItem.ingredients,
         id: beerItem.id,
         name: beerItem.name,
         imageUrl: (beerItem.image_url) ? beerItem.image_url : BASIC_BEER_IMG,
@@ -146,15 +145,15 @@ export function clearItemsFromBeerContainer() {
 export function addToRecentSearches(searchValue) {
     const recentItem = Array.from(RECENT_SEARCHES_CONTAINER.children).find( (elem) => elem.outerText === searchValue);
 
-    if (recentItem) {
-        return;
-    }
+    if (recentItem) return;
 
     const searchItem = document.createElement('div');
 
     searchItem.classList.add(`${CLASSES.RECENT_SEARCH}`);
     searchItem.innerHTML = searchValue;
     RECENT_SEARCHES_CONTAINER.append(searchItem);
+    RECENT_SEARCHES_OBJ[searchValue] = searchValue;
+    saveToLocalStorage(RECENT_SEARCHES_OBJ);
 }
 
 export function addLoadMoreButton() {
@@ -167,7 +166,9 @@ export function addArrow() {
 }
 
 export function navigateToTop() {
-    BEERS_CONTAINER.firstElementChild.scrollIntoView(false);
+    if (!BEERS_CONTAINER.children.length) return;
+    
+    BEERS_CONTAINER.firstElementChild.scrollIntoView();
     setDisplayProperty(BTN_ARROW_UP, DISPLAY_PROPERTIES.NONE);
 }
 
@@ -217,6 +218,7 @@ export function addRemoveFavourites(ev) {
         findBeerItem(beerItem);
     }
 
+    saveToLocalStorage({...FAV_BEERS_ARR});
     updateCounterFav();
     checkBtnFav();
 }
@@ -226,11 +228,7 @@ export function updateCounterFav() {
 }
 
 export function checkBtnFav() {
-    if (FAV_BEERS_ARR.length) {
-        BTN_FAV.disabled = false;
-    } else {
-        BTN_FAV.disabled = true;
-    }
+    FAV_BEERS_ARR.length ? BTN_FAV.disabled = false : BTN_FAV.disabled = true;
 }
 
 export function showFavouriteModal() {
@@ -274,10 +272,12 @@ export function removeFavourites(ev) {
     findBeerItem(beerItem);
     updateCounterFav();
     checkBtnFav();
+    saveToLocalStorage({...FAV_BEERS_ARR});
 }
 
 export function deleteElemFromArr(beerItem) {
     const indexOfItemToDelete = FAV_BEERS_ARR.indexOf(beerItem);
+
     FAV_BEERS_ARR.splice(indexOfItemToDelete, 1);
 }
 
@@ -289,9 +289,7 @@ export function showBeerItemModal(ev) {
 }
 
 export function closeBeerItemModal() {
-    if (BEER_ITEM_MODAL.style.display !== DISPLAY_PROPERTIES.BLOCK) {
-        return;
-    }
+    if (BEER_ITEM_MODAL.style.display !== DISPLAY_PROPERTIES.BLOCK) return;
 
     setDisplayProperty(BEER_ITEM_MODAL, DISPLAY_PROPERTIES.NONE);
     MODAL_OVERLAY_CONTAINER.classList.remove(CLASSES.MODAL_OVERLAY);
@@ -302,5 +300,33 @@ export function closeBeerItemModal() {
 
 export function findBeerItem(beerItem) {
     const divTarget = Array.from(BEERS_CONTAINER.children).find((elem) => +elem.id === beerItem.id);
+
+    if(!divTarget) return;
+
     divTarget.innerHTML = beerItem.getBeerItemHTML();
+}
+
+export function saveToLocalStorage(obj) {
+    obj === RECENT_SEARCHES_OBJ ? window.localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(obj)) : window.localStorage.setItem(FAVOURITE_BEERS_KEY, JSON.stringify(obj));
+}
+
+export function initRecentSearchesLocalStorage() {
+    if (!window.localStorage.getItem(RECENT_SEARCHES_KEY)) return;
+
+    const localRecentSearches = JSON.parse(window.localStorage.getItem(RECENT_SEARCHES_KEY));
+
+    Object.keys(localRecentSearches).forEach( (elem) => addToRecentSearches(elem));
+}
+
+export function initFavBeersLocalStorage() {
+    if (!window.localStorage.getItem(FAVOURITE_BEERS_KEY)) return;
+
+    const localFavBeers = JSON.parse(window.localStorage.getItem(FAVOURITE_BEERS_KEY));
+
+    Object.values(localFavBeers).forEach( (elem) => {
+        FAV_BEERS_ARR.push(elem);
+        BEER_OBJ[elem.id] = elem;
+    });
+    updateCounterFav();
+    checkBtnFav();
 }
