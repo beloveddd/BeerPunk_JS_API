@@ -3,6 +3,7 @@ export const RECENT_SEARCHES_CONTAINER = document.querySelector('#recentSearches
 export const BEERS_CONTAINER = document.querySelector('#beersContainer');
 export const MODAL_OVERLAY_CONTAINER = document.querySelector('.forModalOverlay');
 export const FAV_BEERS_CONTAINER = document.querySelector('#divForFavBeers');
+export const BEER_ITEM_MODAL = document.querySelector('.forBeerItemModal');
 export const BEER_OBJ = {};
 export const FAV_BEERS_ARR = [];
 export const BASIC_BEER_IMG = 'https://images.punkapi.com/v2/keg.png';
@@ -39,6 +40,7 @@ export const CLASSES = {
     MODAL_FAV: 'divFavourites',
     BEER_POINT: 'beerPoint',
     REMOVE_BTN: 'removeBtn',
+    MODAL_BEER_ITEM: 'forBeerItemModal',
 }
 export const MODAL_FAVOURITES = document.querySelector(`.${CLASSES.MODAL_FAV}`);
 export const DIV_WARNING = document.querySelector(`.${CLASSES.DIV_WARNING}`);
@@ -46,6 +48,7 @@ export const DIV_ERROR = document.querySelector(`.${CLASSES.DIV_ERROR}`);
 export const DIV_CONTENT = document.querySelector(`.${CLASSES.DIV_CONTENT}`);
 export const DIV_COUNTER_FAV = document.querySelector(`.${CLASSES.COUNTER_FAV}`);
 export const ENTER_KEY_CODE = 'Enter';
+export const ESC_KEY_CODE = 'Escape';
 export const URL_GET_BEERS = 'https://api.punkapi.com/v2/beers';
 export const URL_PARAMATERS = {
     BEER_NAME: 'beer_name',
