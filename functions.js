@@ -96,9 +96,9 @@ export function getBeerPrice() {
     return randomInteger(5, 10);
 }
 
-export function addNewBeerItem(elem, searchValue) {
+export function addNewBeerItem(elem) {
     const beerData = parseBeerData(elem);
-    const beerItem = new BeerItem(beerData, searchValue);
+    const beerItem = new BeerItem(beerData);
 
     BEER_OBJ[beerItem.id] = beerItem;
     renderBeerItem(beerItem);
