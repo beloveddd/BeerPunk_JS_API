@@ -104,7 +104,8 @@ i.search {
 .divBeer,
 .divError,
 .divWarning,
-.divFavourites {
+.divFavourites,
+.forBeerItemModal {
     background-color: white;
     width: 20rem;
     margin: 10px auto;
@@ -147,7 +148,8 @@ i.search {
 
 .divError,
 .divWarning,
-.divFavourites {
+.divFavourites,
+.forBeerItemModal {
     display: none;
     position: fixed;
     top: 30%;
@@ -157,12 +159,17 @@ i.search {
     min-height: 50px;
 }
 
+.forBeerItemModal {
+    top: 10%;
+}
+
 .divWarning {
     background-color: rgb(255, 255, 104);
     z-index: 100;
 }
 
-.divFavourites {
+.divFavourites,
+.forBeerItemModal {
     background-color: white;
     z-index: 100;
 }

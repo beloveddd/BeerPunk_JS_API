@@ -1,5 +1,5 @@
 import { BeerItem } from "./BeerItem.js";
-import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, MODAL_OVERLAY_CONTAINER, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV, MODAL_FAVOURITES, FAV_BEERS_CONTAINER } from "./consts.js";
+import { ENTER_KEY_CODE, BTNS_IDS, SEARCH_INPUT, CLASSES, URL_GET_BEERS, URL_PARAMATERS, BEERS_CONTAINER, RECENT_SEARCHES_CONTAINER, CURRENCY, BASIC_BEER_IMG, BEER_OBJ, DISPLAY_PROPERTIES, MODAL_OVERLAY_CONTAINER, BTN_ARROW_UP, ITEMS_PER_PAGE, BTN_LOAD_MORE, DIV_WARNING, DIV_ERROR, DIV_CONTENT, REMOVE, ADD, FAV_BEERS_ARR, DIV_COUNTER_FAV, BTN_FAV, MODAL_FAVOURITES, FAV_BEERS_CONTAINER, BEER_ITEM_MODAL, ESC_KEY_CODE } from "./consts.js";
 
 export function checkSearchInputValue(pageCounter, e) {
     const ev = e.target;
@@ -79,6 +79,9 @@ export function parseBeerData(beerItem) {
     
     return {
         isFavourite: FAV_BEERS_ARR.some( (elem) => elem.id === beerItem.id),
+        abv: beerItem.abv,
+        foodPairing: beerItem.food_pairing,
+        ingredients: beerItem.ingredients,
         id: beerItem.id,
         name: beerItem.name,
         imageUrl: (beerItem.image_url) ? beerItem.image_url : BASIC_BEER_IMG,
@@ -131,7 +134,7 @@ export function toggleModal(item, container) {
     setDisplayProperty(item, DISPLAY_PROPERTIES.BLOCK);
     container.classList.add(CLASSES.MODAL_OVERLAY);
 
-    if ( !item.className.includes(CLASSES.MODAL_FAV) ) {
+    if ( !item.className.includes(CLASSES.MODAL_FAV) && !item.className.includes(CLASSES.MODAL_BEER_ITEM) ) {
         setTimeout(() => hideModal(item, container), 2000);
     }
 }
@@ -174,8 +177,9 @@ export function setDisplayProperty(item, property) {
 
 export function defineTarget(e) {
     const ev = e.target;
+    const conditionsForAddRemoveFav = ev.className.includes(CLASSES.FAV_ITEM) && e.key !== ESC_KEY_CODE || ev.className.includes(CLASSES.NOT_FAV_ITEM) && e.key !== ESC_KEY_CODE;
 
-    if ( ev.className.includes(CLASSES.FAV_ITEM) || ev.className.includes(CLASSES.NOT_FAV_ITEM) ) {
+    if (conditionsForAddRemoveFav) {
         addRemoveFavourites(ev);
     }
 
@@ -185,6 +189,10 @@ export function defineTarget(e) {
 
     if ( ev.className.includes(CLASSES.BEER_TITLE) ) {
         showBeerItemModal(ev);
+    }
+
+    if (e.key === ESC_KEY_CODE) {
+        closeBeerItemModal(ev);
     }
 }
 
@@ -203,6 +211,10 @@ export function addRemoveFavourites(ev) {
         ev.innerHTML = REMOVE;
         ev.classList.add(CLASSES.FAV_ITEM);
         ev.classList.remove(CLASSES.NOT_FAV_ITEM);
+    }
+
+    if (ev.parentNode.parentNode.parentNode.parentNode === BEER_ITEM_MODAL) {
+        findBeerItem(beerItem);
     }
 
     updateCounterFav();
@@ -251,16 +263,15 @@ export function closeFavouritesModal() {
 
 export function removeFavourites(ev) {
     const beerItem = Object.values(BEER_OBJ).find((elem) => elem.id === +ev.id);
-    const divTarget = Array.from(BEERS_CONTAINER.children).find((elem) => elem.id === ev.id);
     const itemToDeleteHTML = Array.from(FAV_BEERS_CONTAINER.children).find((elem) => elem.id === ev.id);
 
     //changing the button in the BEERS_CONTAINER
     beerItem.isFavourite = false;
-    divTarget.innerHTML = beerItem.getBeerItemHTML();
     //deleting from the MODAL_FAVOURITES
     itemToDeleteHTML.remove();
     //deleting from the FAV_BEERS_ARR
     deleteElemFromArr(beerItem);
+    findBeerItem(beerItem);
     updateCounterFav();
     checkBtnFav();
 }
@@ -271,6 +282,25 @@ export function deleteElemFromArr(beerItem) {
 }
 
 export function showBeerItemModal(ev) {
-    const beerItem = Object.values(BEER_OBJ).find((elem) => elem.id === +ev.id);
-    
+    const beerItem = Object.values(BEER_OBJ).find((elem) => elem.id === +ev.parentNode.id);
+
+    toggleModal(BEER_ITEM_MODAL, MODAL_OVERLAY_CONTAINER);
+    BEER_ITEM_MODAL.innerHTML = beerItem.getExtraBeerItemHTML();
+}
+
+export function closeBeerItemModal() {
+    if (BEER_ITEM_MODAL.style.display !== DISPLAY_PROPERTIES.BLOCK) {
+        return;
+    }
+
+    setDisplayProperty(BEER_ITEM_MODAL, DISPLAY_PROPERTIES.NONE);
+    MODAL_OVERLAY_CONTAINER.classList.remove(CLASSES.MODAL_OVERLAY);
+    BEER_ITEM_MODAL.innerHTML = '';
+    updateCounterFav();
+    checkBtnFav();
+}
+
+export function findBeerItem(beerItem) {
+    const divTarget = Array.from(BEERS_CONTAINER.children).find((elem) => +elem.id === beerItem.id);
+    divTarget.innerHTML = beerItem.getBeerItemHTML();
 }
